@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7363958648784020804}
   - component: {fileID: 3464944286811696292}
   m_Layer: 0
-  m_Name: TrainingAgent
+  m_Name: RacingTrainingAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d32b462da4ba294595343bf29964191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shape: 03000000030000000200000001000000
-  textAsset: {fileID: 0}
-  weights: []
-  biases: []
+  model: {fileID: 0}
+  shape: 030000000200000001000000
+  hiddenLayerActivation: 1
+  outputActivation: 1
 --- !u!114 &1713180703359056087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,11 +80,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ANN: {fileID: 850594495086073664}
   training: {fileID: 1713180703359056087}
-  speed: 0.1
-  rotation: 16
   environment:
     serializedVersion: 2
     m_Bits: 8
+  speed: 0.1
+  rotation: 20
 --- !u!212 &5359540230838529658
 SpriteRenderer:
   m_ObjectHideFlags: 0

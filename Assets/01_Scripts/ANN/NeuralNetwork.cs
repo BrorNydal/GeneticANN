@@ -7,18 +7,28 @@ using static Unity.Burst.Intrinsics.Arm;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
+public enum Activation : int
+{
+    Sigma = 0, SigmaExtended = 1
+}
+
+[System.Serializable]
 public class NeuralNetworkData
 {
     public int[] shape;
     public float[] weights;
     public float[] biases;
+    public Activation hiddenLayerActivation;
+    public Activation outputActivation;
 }
 
 [System.Serializable]
 public class NeuralNetwork : MonoBehaviour
 {
     [SerializeField] TextAsset model;
-    [SerializeField] int[] shape;    
+    [SerializeField] int[] shape;
+    [SerializeField] Activation hiddenLayerActivation = Activation.Sigma;
+    [SerializeField] Activation outputActivation = Activation.Sigma;
 
     public int[] Shape { get { return shape; } }
     public int NumberOfLayers { get { return shape.Length; } }
@@ -55,6 +65,8 @@ public class NeuralNetwork : MonoBehaviour
                 weights = ann.weights;
                 biases = ann.biases;
                 neurons = new float[NumberOfNeurons];
+                hiddenLayerActivation = ann.hiddenLayerActivation;
+                outputActivation = ann.outputActivation;
             }
             catch (System.Exception ex)
             {
@@ -135,7 +147,7 @@ public class NeuralNetwork : MonoBehaviour
                     neurons[neuronIndex] += ws[weight] * layerValues[weight];
                 }
                 neurons[neuronIndex] += biases[neuronIndex];
-                neurons[neuronIndex] = ActivationFunction.SigmaExtend(neurons[neuronIndex]);
+                neurons[neuronIndex] = ExecActivation(layer, neurons[neuronIndex]);
 
                 newLayerValues[neuron] = neurons[neuronIndex];
             }
@@ -145,6 +157,18 @@ public class NeuralNetwork : MonoBehaviour
 
         return layerValues;
     }    
+
+    float ExecActivation(int layer, float val)
+    {
+        Activation activation;
+
+        if (layer == NumberOfLayers - 1)
+            activation = outputActivation;
+        else
+            activation = hiddenLayerActivation;
+
+        return ActivationFunction.ExecActivation(activation, val);
+    }
 
     /// <summary>
     /// 
@@ -292,13 +316,25 @@ public class NeuralNetwork : MonoBehaviour
 
     public NeuralNetworkData CreateNeuralNetworkData()
     {
-        return new NeuralNetworkData { shape = Shape, weights = Weights, biases = Biases};
+        return new NeuralNetworkData { shape = Shape, weights = Weights, biases = Biases, hiddenLayerActivation = this.hiddenLayerActivation, outputActivation = this.outputActivation};
     }
 }
 
 
 public static class ActivationFunction
 {
+    public static float ExecActivation(Activation act, float val)
+    {
+        switch (act)
+        {
+            case Activation.Sigma:
+                return Sigma(val);
+            case Activation.SigmaExtended:
+                return SigmaExtend(val);
+        }
+        return 0f;
+    }
+
     public static float Sigma(float val)
     {
         return 1f / (1f + Mathf.Exp(-val));

@@ -11,11 +11,15 @@ public class NeuralNetworkEditor : Editor
 
     SerializedProperty ANN_Shape;
     SerializedProperty ANN_Model;
+    SerializedProperty ANN_hidden;
+    SerializedProperty ANN_output;
 
     private void OnEnable()
     {
         ANN_Shape = serializedObject.FindProperty("shape");
         ANN_Model = serializedObject.FindProperty("model");
+        ANN_hidden = serializedObject.FindProperty("hiddenLayerActivation");
+        ANN_output = serializedObject.FindProperty("outputActivation");
     }
 
     public override void OnInspectorGUI()
@@ -32,6 +36,8 @@ public class NeuralNetworkEditor : Editor
         {
             EditorGUILayout.PropertyField(ANN_Model);
             EditorGUILayout.PropertyField(ANN_Shape);
+            EditorGUILayout.PropertyField(ANN_hidden);
+            EditorGUILayout.PropertyField(ANN_output);
         }
 
         serializedObject.ApplyModifiedProperties();

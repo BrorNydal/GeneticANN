@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7363958648784020804}
   - component: {fileID: 3464944286811696292}
   m_Layer: 0
-  m_Name: Agent
+  m_Name: RacingAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d32b462da4ba294595343bf29964191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 0}
   shape: 03000000030000000200000001000000
-  textAsset: {fileID: 4900000, guid: 410cb93835fbc2444a9229bd9ada3504, type: 3}
-  weights: []
-  biases: []
+  hiddenLayerActivation: 0
+  outputActivation: 1
 --- !u!114 &-6597087860069555312
 MonoBehaviour:
   m_ObjectHideFlags: 0

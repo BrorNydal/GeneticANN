@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AgentController : MonoBehaviour
+public class RacingAgent : MonoBehaviour
 {
     [SerializeField] NeuralNetwork ANN;
     [SerializeField] float speed = 1f;
