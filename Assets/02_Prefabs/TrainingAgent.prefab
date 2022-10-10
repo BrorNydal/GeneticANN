@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 850594495086073665}
   - component: {fileID: 850594495086073664}
-  - component: {fileID: -6597087860069555312}
+  - component: {fileID: 1713180703359056087}
+  - component: {fileID: 5252858480428317544}
   - component: {fileID: 5359540230838529658}
   - component: {fileID: 7363958648784020804}
   - component: {fileID: 3464944286811696292}
   m_Layer: 0
-  m_Name: Agent
+  m_Name: TrainingAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,10 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 03000000030000000200000001000000
-  textAsset: {fileID: 4900000, guid: 410cb93835fbc2444a9229bd9ada3504, type: 3}
+  textAsset: {fileID: 0}
   weights: []
   biases: []
---- !u!114 &-6597087860069555312
+--- !u!114 &1713180703359056087
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,10 +62,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 850594495086073667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13562918345cf2644b46fa51306a0780, type: 3}
+  m_Script: {fileID: 11500000, guid: cc02f6d30c6c8de42a30668c7dc443a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ANN: {fileID: 850594495086073664}
+--- !u!114 &5252858480428317544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850594495086073667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2279eb26c353e5e44b587f525c38a7a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ANN: {fileID: 850594495086073664}
+  training: {fileID: 1713180703359056087}
   speed: 0.1
   rotation: 16
   environment:

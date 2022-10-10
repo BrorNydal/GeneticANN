@@ -1,34 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Playables;
+using static Unity.Burst.Intrinsics.Arm;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
+[System.Serializable]
+public class NeuralNetworkData
+{
+    public int[] shape;
+    public float[] weights;
+    public float[] biases;
+}
+
+[System.Serializable]
 public class NeuralNetwork : MonoBehaviour
 {
-    [SerializeField] int[] shape;
+    [SerializeField] TextAsset model;
+    [SerializeField] int[] shape;    
 
-    public delegate void ANNReset();
-    public event ANNReset OnAnnReset; 
-
+    public int[] Shape { get { return shape; } }
     public int NumberOfLayers { get { return shape.Length; } }
     public int NumberOfInputs { get { return shape[0]; } }
     public int NumberOfOutputs { get { return shape[shape.Length - 1]; } }
-    public int NumberOfWeights { get { return numberOfWeights; } }
-    public int NumberOfNeurons { get { return numberOfNeurons; } }
+    public int NumberOfWeights { get { return weights.Length; } }
+    public int NumberOfNeurons { get { return biases.Length; } }
+
+    public bool ModelSelected { get { return model != null; } }
 
     public float[] Weights { get { return weights; } }
     public float[] Biases { get { return biases; } }
-
-    int numberOfWeights = 0;    
-    float[] weights;    
+   
+    float[] weights;
 
     //Excluding input and output neurons
-    int numberOfNeurons = 0;
-    float[] biases;
-
-    bool dead = false;
-    public bool Dead { get { return dead; } }
-    float score = 0f;
-    public float Score { get { return score; } set { if(!dead) score = value; } }
+    float[] biases;    
 
     //array of floats that is set to new values in prediction
     //index to this array coresponds to the index of the biases array
@@ -37,14 +44,38 @@ public class NeuralNetwork : MonoBehaviour
 
     private void Awake()
     {
-        InitializeNeuralNetworkShape();
+        if (ModelSelected)
+        {
+            //Try import the selected model
+            try
+            {
+                string dataToLoad = model.text;
+                NeuralNetworkData ann = JsonUtility.FromJson<NeuralNetworkData>(dataToLoad);
+                shape = ann.shape;
+                weights = ann.weights;
+                biases = ann.biases;
+                neurons = new float[NumberOfNeurons];
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Error on loading model \n {ex.Message}");
+            }            
+        }
+        else
+        {
+            //Create a new model
+            InitializeNeuralNetworkShape();
+            RandomizeAll();
+        }
+    }
 
-        for(int i = 0; i < weights.Length; ++i)
+    private void RandomizeAll()
+    {
+        for (int i = 0; i < weights.Length; ++i)
         {
             weights[i] = Random.Range(-1f, 1f);
         }
-
-        for(int i = 0; i < biases.Length; ++i)
+        for (int i = 0; i < biases.Length; ++i)
         {
             biases[i] = Random.Range(-1f, 1f);
         }
@@ -58,15 +89,13 @@ public class NeuralNetwork : MonoBehaviour
             return;
         }
 
-        numberOfNeurons += shape[0];
+        int numberOfNeurons = 0;
+        int numberOfWeights = 0;        
 
         for (int i = 1; i < NumberOfLayers; i++)
         {
             numberOfWeights += shape[i] * shape[i - 1];
-
-            //Only count neurons not in the input and output layer
-            if(i > 0 && i < NumberOfLayers - 1)
-                numberOfNeurons += shape[i];
+            numberOfNeurons += shape[i];
         }
 
         weights = new float[numberOfWeights];
@@ -84,17 +113,19 @@ public class NeuralNetwork : MonoBehaviour
 
         float[] layerValues = input;
         float[] newLayerValues;
+        float[] ws;
 
-        for(int layer = 1; layer < NumberOfLayers; ++layer)
+        for (int layer = 1; layer < NumberOfLayers; ++layer)
         {
             newLayerValues = new float[shape[layer]];
 
             for(int neuron = 0; neuron < shape[layer]; ++neuron)
             {
+                //TODO: We need outp
                 int neuronIndex = GetNeuronIndex(layer, neuron);
                 neurons[neuronIndex] = 0f;
 
-                float[] ws = GetWeights(layer, neuron);
+                ws = GetWeights(layer, neuron);
 
                 if (ws.Length != layerValues.Length)
                     Debug.LogWarning("Length of weight array and previous layer size is not equal!");
@@ -113,35 +144,7 @@ public class NeuralNetwork : MonoBehaviour
         }
 
         return layerValues;
-    }
-
-    public void Die()
-    {
-        dead = true;
-    }
-
-    public void Die(float _score)
-    {
-        Score = _score;
-        dead = true;
-    }
-
-    public void ResetANN()
-    {        
-        dead = false;
-        Score = 0f;
-        OnAnnReset();
-    }
-
-    public void Reward(float reward)
-    {
-        Score += reward;
-    }
-
-    public void Punish(float punishment)
-    {
-        Score -= punishment;
-    }   
+    }    
 
     /// <summary>
     /// 
@@ -208,12 +211,11 @@ public class NeuralNetwork : MonoBehaviour
 
     public int GetNeuronIndex(int layer, int index)
     {
-        int id = 0;
+        int id = index;
         for(int i = 1; i < layer; i++)
         {
             id += shape[i];
         }
-        id += index;
 
         return id;
     }
@@ -286,24 +288,11 @@ public class NeuralNetwork : MonoBehaviour
         biases[b] = Mathf.Clamp(biases[b], -1f, 1f);
     }
 
-    public float GetWeightPassingTo(int layer, int neuron, int index)
-    {
-        return 0F;
-    }
 
-    public float GetWeightPassingTo(int neuron, int index)
-    {
-        return 0F;
-    }
 
-    public float GetWeightPassingFrom(int layer, int neuron, int index)
+    public NeuralNetworkData CreateNeuralNetworkData()
     {
-        return 0F;
-    }
-
-    public float GetWeightPassingFrom(int neuron, int index)
-    {
-        return 0F;
+        return new NeuralNetworkData { shape = Shape, weights = Weights, biases = Biases};
     }
 }
 

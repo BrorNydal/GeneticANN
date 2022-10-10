@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AgentMovement : MonoBehaviour
+public class TrainingAgent : MonoBehaviour
 {
     [SerializeField] NeuralNetwork ANN;
+    [SerializeField] NeuralNetworkTraining training;
     [SerializeField] float speed = 1f;
     [SerializeField] float rotation = 1f;
     [SerializeField] LayerMask environment;
@@ -17,12 +18,12 @@ public class AgentMovement : MonoBehaviour
     private void Start()
     {
         start = transform.position;
-        ANN.OnAnnReset += ANN_OnAnnReset;
+        training.OnAnnReset += ANN_OnAnnReset;
     }
 
     private void OnDestroy()
     {
-        ANN.OnAnnReset -= ANN_OnAnnReset;
+        training.OnAnnReset -= ANN_OnAnnReset;
     }
 
     private void ANN_OnAnnReset()
@@ -35,7 +36,7 @@ public class AgentMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (ANN != null && !ANN.Dead)
+        if (training != null && !training.Finished)
         {
             timer += 0.016f;
 
@@ -47,7 +48,7 @@ public class AgentMovement : MonoBehaviour
             input[2] = Physics2D.Raycast(transform.position, (transform.right - transform.up).normalized, 100f, environment).distance;
 
             //predicts a value based on the three raycasts
-            float prediction = (float)ANN.predict(input)[0];
+            float prediction = ANN.predict(input)[0];
             transform.Rotate(Vector3.forward, rotation * prediction);
             bonus += Mathf.Abs(prediction * 0.016f) + 0.016f;
             //Debug.Log($"Input : ({input[0]},{input[1]},{input[2]}), Prediction : {(float)prediction}");
@@ -58,11 +59,11 @@ public class AgentMovement : MonoBehaviour
     {
         if (collision.CompareTag("Wall"))
         {
-            ANN.Die(bonus);
+            training.Finish(bonus);
         }
         else if (collision.CompareTag("Finish"))
         {
-            ANN.Die(bonus + (1f - timer/100f) * 100f);
+            training.Finish(bonus + (1f - timer/100f) * 100f);
         }
-    }
+    }    
 }
