@@ -41,5 +41,7 @@ public class TrainingRacingAgent : TrainingAgent
         {
             FinishTraining((1f - timer/100f) * 100f);
         }
-    }    
+    }
+
+    
 }

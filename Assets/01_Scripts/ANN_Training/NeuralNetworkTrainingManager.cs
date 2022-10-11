@@ -31,15 +31,16 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
     [SerializeField, Range(-1f, 1f)] float tweakScale = 0.1f;
     [SerializeField] int keepTop = 3;
     [SerializeField] int transformLowerScore = 3;
+    [SerializeField] float minimumBeat = 0f;
 
-    List<SimulationEnviorment> environments = new List<SimulationEnviorment>();
     List<NeuralNetworkTraining> neuralNetworks;
 
     NeuralNetworkTraining winner = null;
-    bool nextStage = false;
     int iterations = 0;
     int improvements = 0;
-    
+
+    public delegate void TrainingComplete();
+    public static event TrainingComplete OnTrainingComplete;
 
     private void Awake()
     {              
@@ -60,7 +61,6 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
         if (environmentPrefab != null)
         {
             GameObject goEnvironment = GameObject.Instantiate(environmentPrefab, Vector2.zero, Quaternion.identity, transform);
-            environments.Add(goEnvironment.GetComponent<SimulationEnviorment>());
         }
         else Debug.LogWarning("No environment prefab selected!");
 
@@ -85,7 +85,6 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
             for (int i = 0; i < simulations; i++)
             {
                 GameObject goEnvironment = GameObject.Instantiate(environmentPrefab, loc, Quaternion.identity, transform);
-                environments.Add(goEnvironment.GetComponent<SimulationEnviorment>());
 
                 GameObject goAgent = GameObject.Instantiate(agentPrefab, loc + (Vector2)agentRelativeSpawn, Quaternion.identity, transform);
                 neuralNetworks.Add(goAgent.GetComponent<NeuralNetworkTraining>());
@@ -104,12 +103,7 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
     public void ExtractBest(string name)
     {
         neuralNetworks[0].ExtractNeuralNetwork(name);
-    }
-
-    public void NextStage()
-    {
-        nextStage = true;
-    }    
+    }  
 
     private void FixedUpdate()
     {
@@ -126,6 +120,8 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
 
         if (allFinish)
         {
+            OnTrainingComplete();
+
             float[] scores = new float[simulations];
             int best = 0;
             iterations++;
@@ -154,17 +150,12 @@ public class NeuralNetworkTrainingManager : MonoBehaviour
             {
                 neuralNetworks[i].ResetANN();
             }
-
-            if(nextStage)
-                environments.ForEach(x => x.NextStage());
-
-            nextStage = false;
         }
     }
 
     private void Breed()
     {
-        neuralNetworks.Sort((x,y) => x.Score > y.Score ? -1 : 1);  
+        neuralNetworks.Sort((x,y) => x.Score > y.Score ? -1 : 1);
 
         if (neuralNetworks[0] != winner)
         {

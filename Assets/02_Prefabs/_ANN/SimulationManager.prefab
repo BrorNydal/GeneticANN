@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7789022518471223345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7789022518471223347}
+  - component: {fileID: 7789022518471223344}
+  - component: {fileID: 7789022518471223346}
+  m_Layer: 0
+  m_Name: SimulationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7789022518471223347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789022518471223345}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7789022518471223344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789022518471223345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a535da9cfb7ec4992452672a38fa48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulations: 50
+  environmentPrefab: {fileID: 3083035225747013659, guid: 0b6ce290ae365b74892f33dfef1db259, type: 3}
+  duplicateEnviorment: 0
+  environmentWidth: 20
+  environmentHeight: 10
+  agentPrefab: {fileID: 850594495086073667, guid: 6ffae6ba703cdf34f84072bac93dadf2, type: 3}
+  agentRelativeSpawn: {x: -8.2, y: 0, z: 0}
+  trainingMethod: 1
+  tweakScale: 0.2
+  keepTop: 5
+  transformLowerScore: 5
+--- !u!114 &7789022518471223346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789022518471223345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fec21ca49a7584eb042db98dbfd91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulationSpeed: 1
+  randomSeed: 0

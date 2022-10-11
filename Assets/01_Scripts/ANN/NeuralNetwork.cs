@@ -9,7 +9,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 [System.Serializable]
 public enum Activation : int
 {
-    Sigma = 0, SigmaExtended = 1
+    Sigma = 0, SigmaExtended = 1, BinaryStep = 2
 }
 
 [System.Serializable]
@@ -343,6 +343,12 @@ public static class ActivationFunction
     {
         return ((1f / (1f + Mathf.Exp(-val))) * 2f) - 1f;
     }
+
+    public static float BinaryStep(float val)
+    {
+        return val >= 0 ? 1f : 0f;
+    }
+
     public static float Tanh(float val)
     {
         return (float)System.Math.Tanh(val);

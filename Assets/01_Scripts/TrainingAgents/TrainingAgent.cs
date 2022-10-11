@@ -65,7 +65,8 @@ public class TrainingAgent : MonoBehaviour
 
     protected virtual void FinishTraining()
     {
-        training?.Finish(bonus);
+        if(!training.Finished)
+            training?.Finish(bonus);
     }
 
     protected void FinishTraining(float extra)
