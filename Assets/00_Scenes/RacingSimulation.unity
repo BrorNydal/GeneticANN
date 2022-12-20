@@ -678,6 +678,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingSimulation
       objectReference: {fileID: 0}
+    - target: {fileID: 6181635644757641439, guid: 99c5b92b67d871046b6493d227384feb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7385344435045545791, guid: 99c5b92b67d871046b6493d227384feb, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -721,6 +725,10 @@ PrefabInstance:
     - target: {fileID: 7385344435045545791, guid: 99c5b92b67d871046b6493d227384feb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8535943521311007774, guid: 99c5b92b67d871046b6493d227384feb, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c5b92b67d871046b6493d227384feb, type: 3}

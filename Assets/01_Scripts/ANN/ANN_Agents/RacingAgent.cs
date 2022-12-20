@@ -2,20 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RacingAgent : MonoBehaviour
+public class RacingAgent : AgentANN
 {
-    [SerializeField] NeuralNetwork ANN;
     [SerializeField] float speed = 1f;
     [SerializeField] float rotation = 1f;
-    [SerializeField] LayerMask environment;
-
-    Vector2 start;
-    float[] input = new float[3];
-
-    private void Start()
-    {
-        start = transform.position;
-    }
 
     private void FixedUpdate()
     {
@@ -29,19 +19,5 @@ public class RacingAgent : MonoBehaviour
         //predicts a value based on the three raycasts
         float prediction = ANN.predict(input)[0];
         transform.Rotate(Vector3.forward, rotation * prediction);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Wall"))
-        {
-            transform.position = start;
-            transform.rotation = Quaternion.identity;
-        }
-        else if (collision.CompareTag("Finish"))
-        {
-            transform.position = start;
-            transform.rotation = Quaternion.identity;
-        }
     }
 }

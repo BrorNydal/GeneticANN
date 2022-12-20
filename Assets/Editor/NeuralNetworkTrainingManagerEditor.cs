@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using ANN.Training;
 
 [CustomEditor(typeof(NeuralNetworkTrainingManager))]
 public class NeuralNetworkTrainingManagerEditor : Editor

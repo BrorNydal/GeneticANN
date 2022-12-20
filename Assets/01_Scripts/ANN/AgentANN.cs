@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ANN;
 
 public class AgentANN : MonoBehaviour
 {
     [SerializeField] protected NeuralNetwork ANN;
     [SerializeField] protected LayerMask environment;
-
-    protected Vector2 start;
     protected float[] input;
 
     // Start is called before the first frame update
@@ -18,8 +17,6 @@ public class AgentANN : MonoBehaviour
             input = new float[ANN.Shape[0]];
         }
         else Debug.LogError($"ANN null on agent {gameObject.name}!");
-
-        start = transform.position;
     }
 
     /// <summary>

@@ -11,6 +11,12 @@ public class JumpingAgent : AgentANN
 
     float cdTimer = 0f;
     bool canJump = true;
+    Vector3 start;
+
+    private void Awake()
+    {
+        start = transform.position;
+    }
 
     private void FixedUpdate()
     {

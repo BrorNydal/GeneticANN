@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using ANN;
 
 [CustomEditor(typeof(NeuralNetwork))]
 [CanEditMultipleObjects]
@@ -13,6 +14,8 @@ public class NeuralNetworkEditor : Editor
     SerializedProperty ANN_Model;
     SerializedProperty ANN_hidden;
     SerializedProperty ANN_output;
+
+    string fileName = "";
 
     private void OnEnable()
     {
@@ -38,6 +41,17 @@ public class NeuralNetworkEditor : Editor
             EditorGUILayout.PropertyField(ANN_Shape);
             EditorGUILayout.PropertyField(ANN_hidden);
             EditorGUILayout.PropertyField(ANN_output);
+        }
+
+        if (EditorApplication.isPlaying)
+        {
+            GUILayout.TextField("Model Name");
+            fileName = EditorGUILayout.TextField(fileName);
+
+            if (GUILayout.Button("Extract Model"))
+            {
+                ANN.ExtractNeuralNetwork(fileName);
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
